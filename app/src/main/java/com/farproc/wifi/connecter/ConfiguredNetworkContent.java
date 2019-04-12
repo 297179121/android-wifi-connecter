@@ -27,7 +27,9 @@ package com.farproc.wifi.connecter;
 
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -98,6 +100,11 @@ public class ConfiguredNetworkContent extends BaseContent {
 		
 		@Override
 		public void onClick(View v) {
+            WifiInfo info = mWifiManager.getConnectionInfo();
+            boolean isCurrentWifi = info != null && TextUtils.equals(info.getSSID(), mScanResult.SSID);
+            if( !isCurrentWifi ){
+                mWifiManager.disconnect();
+            }
 			final WifiConfiguration config = Wifi.getWifiConfiguration(mWifiManager, mScanResult, mScanResultSecurity);
 			boolean connResult = false;
 			if(config != null) {
